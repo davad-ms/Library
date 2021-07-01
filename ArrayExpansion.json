@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dataDiskInfo":{
+            "type": "array"
+        },
+        "vmName": {
+            "type": "string"
+        },
+        "ASGInfo": {
+            "type": "array"
+        }
+    },
+    "variables": {
+        "copy": [
+            {
+                "name": "diskCopy",
+                "count": "[length(parameters('dataDiskInfo'))]",
+                "input": {
+                    "name": "[concat(parameters('vmName'), '-datadisk',copyIndex('diskCopy'))]",
+                    "lun": "[copyIndex('diskCopy')]",
+                    "managedDisk": {
+                        "storageAccountType": "Standard_LRS"
+                    },
+                    "createOption": "Empty",
+                    "caching": "ReadWrite",
+                    "diskSizeGB": "[parameters('dataDiskInfo')[copyIndex('diskCopy')]]"                    
+                }
+            },
+            {
+                "name": "ASGCopy",
+                "count": "[length(parameters('ASGInfo'))]",
+                "input": {
+                    "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', concat('ASG_', parameters('ASGInfo')[copyIndex('ASGCopy')]))]"
+                }
+            }
+        ]     
+    },
+    "resources": [       
+    ],
+    "outputs": {
+        "diskResult": {
+            "type": "array",
+            "value": "[take(variables('diskCopy'),length(parameters('dataDiskInfo')))]"
+        },
+        "asgResult": {
+            "type": "array",
+            "value": "[take(variables('ASGCopy'),length(parameters('ASGInfo')))]"
+        }
+    }
+}
