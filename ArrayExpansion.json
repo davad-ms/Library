@@ -42,7 +42,10 @@
                 "name": "NICCopy",
                 "count": "[length(parameters('NICInfo'))]",
                 "input": {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat('NIC_', parameters('NICInfo')[copyIndex('NICCopy')]))]"
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat('NIC_', parameters('NICInfo')[copyIndex('NICCopy')]))]",
+                    "properties":{
+                        "primary": "[if(greater(copyIndex(),0),'false','true')]"
+                    }                    
                 }
             }
         ]     
