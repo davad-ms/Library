@@ -21,7 +21,7 @@
                 "name": "diskCopy",
                 "count": "[length(parameters('dataDiskInfo'))]",
                 "input": {
-                    "name": "[concat(parameters('vmName'), '-datadisk',copyIndex('diskCopy'))]",
+                    "name": "[concat(parameters('vmName'), '-DDisk',copyIndex('diskCopy'))]",
                     "lun": "[copyIndex('diskCopy')]",
                     "managedDisk": {
                         "storageAccountType": "Standard_LRS"
@@ -35,14 +35,14 @@
                 "name": "ASGCopy",
                 "count": "[length(parameters('ASGInfo'))]",
                 "input": {
-                    "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', concat('ASG_', parameters('ASGInfo')[copyIndex('ASGCopy')]))]"
+                    "id": "[resourceId('Microsoft.Network/applicationSecurityGroups', concat(parameters('ASGInfo')[copyIndex('ASGCopy')],'-ASG'))]"
                 }
             },
             {
                 "name": "NICCopy",
                 "count": "[length(parameters('NICInfo'))]",
                 "input": {
-                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat('NIC_', parameters('NICInfo')[copyIndex('NICCopy')]))]",
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('NICInfo')[copyIndex('NICCopy')],'-NIC'))]",
                     "properties":{
                         "primary": "[if(greater(copyIndex('NICCopy'),0),'false','true')]"
                     }                    
