@@ -24,7 +24,7 @@
                     "name": "[concat(parameters('vmName'), '-DDisk',copyIndex('diskCopy'))]",
                     "lun": "[copyIndex('diskCopy')]",
                     "managedDisk": {
-                        "storageAccountType": "Standard_LRS"
+                        "storageAccountType": "Premium_LRS"
                     },
                     "createOption": "Empty",
                     "caching": "ReadWrite",
